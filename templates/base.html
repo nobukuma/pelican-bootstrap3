@@ -13,6 +13,7 @@
     <link href="{{ SITEURL }}/{{ FAVICON }}" rel="icon">
     {% endif %}
 
+
     {# Open Graph tags #}
     {% if USE_OPEN_GRAPH is not defined %}
         {% set USE_OPEN_GRAPH = True %}
@@ -23,6 +24,10 @@
             <meta property="fb:app_id" content="{{ OPEN_GRAPH_FB_APP_ID }}"/>
         {% endif %}
         <meta property="og:site_name" content="{{ SITENAME }}" />
+        {% if OPEN_GRAPH_IMAGE %}
+            <meta property="og:image"
+                  content="{{ SITEURL }}/{{ OPEN_GRAPH_IMAGE }}"/>
+        {% endif %}
         {% if article %}
             <meta property="og:type" content="article"/>
             <meta property="og:title" content="{{ article.title|striptags }}"/>
@@ -47,12 +52,11 @@
             <meta property="og:title" content="{{ SITENAME }}"/>
             <meta property="og:url" content="{{ SITEURL }}"/>
             <meta property="og:description" content="{{ SITENAME }}"/>
-            {% if OPEN_GRAPH_IMAGE %}
-            <meta property="og:image"
-                  content="{{ SITEURL }}/static/{{ OPEN_GRAPH_IMAGE }}"/>
-            {% endif %}
         {% endif %}
     {% endif %}
+
+    {# Twitter Cards tags #}
+    {% include 'includes/twitter_cards.html' %}
 
     <!-- Bootstrap -->
     {% if BOOTSTRAP_THEME %}
@@ -108,7 +112,7 @@
                 {% if DISPLAY_PAGES_ON_MENU %}
                     {% for p in PAGES %}
                          <li{% if p == page %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ p.url }}">
-                             {{ p.title }}
+                             {{ p.menulabel|default(p.title) }}
                           </a></li>
                       {% endfor %}
                 {% endif %}
@@ -122,6 +126,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{ SITEURL }}/{{ ARCHIVES_URL | default('archives.html') }}"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+                <li><a href="/feeds/all.rss.xml" target="_blank"><i class="fa fa-rss-square fa-lg"></i><span class="icon-label">RSS</span></a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
